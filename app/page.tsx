@@ -1,5 +1,6 @@
 import CategoryList from "@/components/CategoryList";
 import Header from "@/components/Header";
+import ProductList from "@/components/ProductList";
 import Search from "@/components/Search";
 import Image from "next/image";
 
@@ -27,6 +28,8 @@ export default function Home() {
           quality={100}
         />
       </div>
+
+      <ProductList/>
     </>
   );
 }
