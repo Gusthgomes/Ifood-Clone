@@ -1,6 +1,15 @@
 import Header from "@/components/Header";
-import Image from "next/image";
+import Search from "@/components/Search";
+
 
 export default function Home() {
-  return <Header/>
+  return (
+    <>
+      <Header/>
+      <div className="px-6 pt-6">
+      <Search/>
+      </div>
+      
+    </>
+  );
 }
