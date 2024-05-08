@@ -8,6 +8,7 @@ import { Button } from "./ui/button";
 import { BikeIcon, ChevronLeftIcon, ChevronRightIcon, TimerIcon } from "lucide-react";
 import { useState } from "react";
 import { Card } from "./ui/card";
+import ProductList from "./ProductList";
 
 interface ProductsDetailsProps {
     products: Prisma.ProductsGetPayload<{
@@ -15,9 +16,15 @@ interface ProductsDetailsProps {
             restaurant: true,
         },
     }>;
+    //@ts-ignore
+    complementaryProducts: Prisma.ProductsPayload<{
+        include: {
+            restaurant: true,
+        },
+    }>[];
 };
 
-const ProductsDetails = ({ products }: ProductsDetailsProps) => {
+const ProductsDetails = ({ products, complementaryProducts }: ProductsDetailsProps) => {
     const [quantity, setQuantity] = useState(1);
 
     const handleIncreaseQuantityClick =() => setQuantity(currentState => currentState + 1);
@@ -27,10 +34,10 @@ const ProductsDetails = ({ products }: ProductsDetailsProps) => {
     });
 
     return ( 
-        <div className="p-5">
+        <div className="py-5">
 
                 {/* RESTAURANTE */}
-            <div className="flex items-center gap-[0.375rem]">
+            <div className="flex items-center gap-[0.375rem] px-5">
                 <div className="relative h-6 w-6">
                     <Image
                         src={products?.restaurant?.imageUrl}
@@ -43,10 +50,10 @@ const ProductsDetails = ({ products }: ProductsDetailsProps) => {
             </div>
 
                 {/* NOME DO PRODUTO */}
-            <h1 className="text-xl font-semibold mb-2 mt-1">{ products.name }</h1>
+            <h1 className="text-xl font-semibold mb-2 mt-1 px-5">{ products.name }</h1>
 
             {/* PREÇO DO PRODUTO E QUANTIDADE */}
-            <div className="flex justify-between">
+            <div className="flex justify-between px-5">
 
                 {/* PREÇO COM DESCONTO */}
                 <div>
@@ -87,45 +94,57 @@ const ProductsDetails = ({ products }: ProductsDetailsProps) => {
             </div>
 
             {/* DADOS DA ENTREGA */}
-            <Card className="flex justify-around py-2 mt-6">
-                {/* CUSTO */}
-                <div className="flex flex-col items-center">
-                    <div className="flex items-center gap-1 text-muted-foreground">
-                        <BikeIcon size={14} className="text-primary"/>
-                        <span className="text-xs">Entrega</span>
+            <div className="px-5">
+                <Card className="flex justify-around py-2 mt-6">
+                    {/* CUSTO */}
+                    <div className="flex flex-col items-center">
+                        <div className="flex items-center gap-1 text-muted-foreground">
+                            <BikeIcon size={14} className="text-primary"/>
+                            <span className="text-xs">Entrega</span>
+                        </div>
+
+
+                        {Number(products.restaurant?.deliveryFee) > 0 ? (
+                            <p className="text-xs font-semibold">
+                                {formatCurrency(Number(products.restaurant?.deliveryFee))}
+                            </p>
+                        ) : (
+                            <p className="text-xs font-semibold"> 
+                                Grátis 
+                            </p>
+                        )}
                     </div>
 
+                    {/* TEMPO */}
+                    <div className="flex flex-col items-center">
+                        <div className="flex items-center gap-1 text-muted-foreground">
+                            <TimerIcon size={14} className="text-primary"/>
+                            <span className="text-xs">Entrega</span>
+                        </div>
 
-                    {Number(products.restaurant?.deliveryFee) > 0 ? (
-                        <p className="text-xs font-semibold">
-                            {formatCurrency(Number(products.restaurant?.deliveryFee))}
-                        </p>
-                    ) : (
-                        <p className="text-xs font-semibold"> 
-                            Grátis 
-                        </p>
-                    )}
-                </div>
 
-                {/* TEMPO */}
-                <div className="flex flex-col items-center">
-                    <div className="flex items-center gap-1 text-muted-foreground">
-                        <TimerIcon size={14} className="text-primary"/>
-                        <span className="text-xs">Entrega</span>
+                        {Number(products.restaurant?.deliveryFee) > 0 ? (
+                            <p className="text-xs font-semibold">
+                                { products.restaurant?.deliveryTimeMinutes } min
+                            </p>
+                        ) : (
+                            <p className="text-xs font-semibold"> 
+                                Grátis 
+                            </p>
+                        )}
                     </div>
+                </Card>
+            </div>
+            <div className="mt-6 space-y-3 px-5">
+                <h3 className="font-semibold">Sobre</h3>
+                <p className="text-sm text-muted-foreground">{ products.description }</p>
+            </div>  
 
+            <div className="mt-6 space-y-3">
+                <h3 className="px-5 font-semibold">Sucos</h3>
+                <ProductList product={complementaryProducts}/>
+            </div>     
 
-                    {Number(products.restaurant?.deliveryFee) > 0 ? (
-                        <p className="text-xs font-semibold">
-                            { products.restaurant?.deliveryTimeMinutes } min
-                        </p>
-                    ) : (
-                        <p className="text-xs font-semibold"> 
-                            Grátis 
-                        </p>
-                    )}
-                </div>
-            </Card>
         </div>
     );
 }
