@@ -143,6 +143,10 @@ const ProductsDetails = ({ products, complementaryProducts }: ProductsDetailsPro
             <div className="mt-6 space-y-3">
                 <h3 className="px-5 font-semibold">Sucos</h3>
                 <ProductList product={complementaryProducts}/>
+            </div>
+
+            <div className="mt-6 px-5">
+                <Button className="w-full font-semibold">Adicionar a sacola</Button>
             </div>     
 
         </div>
