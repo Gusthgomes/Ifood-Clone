@@ -5,8 +5,8 @@ import { notFound } from "next/navigation";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Detales",
-    description: "Detales do produto",
+    title: "Detalhes dos produtos",
+    description: "Detalhes dos produtos",
 };
 
 interface ProductsPageProps {
