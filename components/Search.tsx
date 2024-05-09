@@ -10,7 +10,7 @@ const Search = () => {
                 <SearchIcon size={20}/>
             </Button>
         </div>
-     );
+    );
 }
- 
+
 export default Search;
