@@ -19,7 +19,7 @@ const RestaurantImage = ({ restaurants }: RestaurantImageProps) => {
     };
 
     return ( 
-        <div className="relative h-[215px] w-full">
+        <div className="relative h-[250px] w-full">
             <Image 
                     src={restaurants?.imageUrl} 
                     alt={restaurants?.name} 
