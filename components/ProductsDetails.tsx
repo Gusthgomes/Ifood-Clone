@@ -5,10 +5,10 @@ import DiscountBadge from "./DiscountBadge";
 import { calculateProductsTotalPrice, formatCurrency } from "@/helpers/price";
 import { Prisma } from "@prisma/client";
 import { Button } from "./ui/button";
-import { BikeIcon, ChevronLeftIcon, ChevronRightIcon, TimerIcon } from "lucide-react";
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { useState } from "react";
-import { Card } from "./ui/card";
 import ProductList from "./ProductList";
+import DeliveryInfo from "./DeliveryInfo";
 
 interface ProductsDetailsProps {
     products: Prisma.ProductsGetPayload<{
@@ -95,45 +95,7 @@ const ProductsDetails = ({ products, complementaryProducts }: ProductsDetailsPro
 
             {/* DADOS DA ENTREGA */}
             <div className="px-5">
-                <Card className="flex justify-around py-2 mt-6">
-                    {/* CUSTO */}
-                    <div className="flex flex-col items-center">
-                        <div className="flex items-center gap-1 text-muted-foreground">
-                            <BikeIcon size={14} className="text-primary"/>
-                            <span className="text-xs">Entrega</span>
-                        </div>
-
-
-                        {Number(products.restaurant?.deliveryFee) > 0 ? (
-                            <p className="text-xs font-semibold">
-                                {formatCurrency(Number(products.restaurant?.deliveryFee))}
-                            </p>
-                        ) : (
-                            <p className="text-xs font-semibold"> 
-                                Grátis 
-                            </p>
-                        )}
-                    </div>
-
-                    {/* TEMPO */}
-                    <div className="flex flex-col items-center">
-                        <div className="flex items-center gap-1 text-muted-foreground">
-                            <TimerIcon size={14} className="text-primary"/>
-                            <span className="text-xs">Entrega</span>
-                        </div>
-
-
-                        {Number(products.restaurant?.deliveryFee) > 0 ? (
-                            <p className="text-xs font-semibold">
-                                { products.restaurant?.deliveryTimeMinutes } min
-                            </p>
-                        ) : (
-                            <p className="text-xs font-semibold"> 
-                                Grátis 
-                            </p>
-                        )}
-                    </div>
-                </Card>
+                <DeliveryInfo restaurant={ products.restaurant }/>
             </div>
             <div className="mt-6 space-y-3 px-5">
                 <h3 className="font-semibold">Sobre</h3>
