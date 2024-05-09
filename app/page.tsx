@@ -49,15 +49,16 @@ const Home = async () => {
           <h2 className="font-semibold">
             Pedidos recomendados
           </h2>
-          <Link href="/products/recommended">
             <Button 
               className="h-fit p-0 text-primary hover:bg-transparent" 
               variant="ghost"
+              asChild
             >
-              Ver todos
-              <ChevronRightIcon size={16}/>
+              <Link href="/products/recommended">
+                Ver todos
+                <ChevronRightIcon size={16}/>
+              </Link>
             </Button>
-          </Link>
         </div>
         <ProductList product={products}/>
       </div>
@@ -74,15 +75,16 @@ const Home = async () => {
           <h2 className="font-semibold">
             Restaurantes recomendados
           </h2>
-          <Link href="/restaurants/recommended">
             <Button 
               className="h-fit p-0 text-primary hover:bg-transparent" 
               variant="ghost"
+              asChild
             >
-              Ver todos
-              <ChevronRightIcon size={16}/>
+              <Link href="/restaurants/recommended">
+                  Ver todos
+                  <ChevronRightIcon size={16}/>
+              </Link>
             </Button>
-          </Link>
         </div>
         <RestaurantList />
       </div>
