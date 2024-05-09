@@ -7,6 +7,7 @@ import Search from "@/components/Search";
 import { Button } from "@/components/ui/button";
 import { db } from "@/lib/prisma";
 import { ChevronRightIcon } from "lucide-react";
+import Link from "next/link";
 
 
 const Home = async () => {
@@ -71,13 +72,15 @@ const Home = async () => {
           <h2 className="font-semibold">
             Restaurantes recomendados
           </h2>
-          <Button 
-            className="h-fit p-0 text-primary hover:bg-transparent" 
-            variant="ghost"
-          >
-            Ver todos
-            <ChevronRightIcon size={16}/>
-          </Button>
+          <Link href="/restaurants/recommended">
+            <Button 
+              className="h-fit p-0 text-primary hover:bg-transparent" 
+              variant="ghost"
+            >
+              Ver todos
+              <ChevronRightIcon size={16}/>
+            </Button>
+          </Link>
         </div>
         <RestaurantList />
       </div>

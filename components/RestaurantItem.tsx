@@ -4,14 +4,19 @@ import { BikeIcon, HeartIcon, StarIcon, TimerIcon } from "lucide-react";
 import Image from "next/image";
 import { Button } from "./ui/button";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 interface RestaurantItemProps {
     restaurant: Restaurant;
+    className?: string;
 };
 
-const RestaurantItem = ({ restaurant }: RestaurantItemProps) => {
+const RestaurantItem = ({ restaurant, className }: RestaurantItemProps) => {
     return (
-        <Link className="min-w-[266px] max-w-[266px]" href={`/restaurants/${restaurant.id}`}>
+        <Link 
+            className={ cn("min-w-[266px] max-w-[266px]", className )}
+            href={`/restaurants/${restaurant.id}`}
+        >
             <div className="w-full space-y-3">
                 <div className="w-full h-[136px] relative">
                     <Image
