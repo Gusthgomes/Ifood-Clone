@@ -12,6 +12,7 @@ import DeliveryInfo from "./DeliveryInfo";
 import { CartContext } from "@/context/cart";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "./ui/sheet";
 import Cart from "./Cart";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "./ui/alert-dialog";
 
 interface ProductsDetailsProps {
     products: Prisma.ProductsGetPayload<{
@@ -30,12 +31,29 @@ interface ProductsDetailsProps {
 const ProductsDetails = ({ products, complementaryProducts }: ProductsDetailsProps) => {
     const [quantity, setQuantity] = useState(1);
     const [isCartOpen, setIsCartOpen] = useState(false);
+    const [isConfirmationDialogOpen, setIsConfirmationDialogOpen] = useState(false);
 
-    const { addProductToCart } = useContext(CartContext);
+    const { addProductToCart, products: prod } = useContext(CartContext);
 
-    const handleAddToCartClick = () => {
+    const addToCart = () => {
         addProductToCart(products, quantity);
         setIsCartOpen(true);
+    };
+
+    const handleAddToCartClick = () => {
+
+        // VERIFICAR SE HÁ UM PRODUTO DE OUTRO RESTAURANTE NA SACOLA
+        const hasDifferentRestaurantProduct = prod.some(
+            (CartProduct) => CartProduct.restaurantId !== products.restaurantId
+        );
+        
+        // SE HOUVER, ABRIR UM AVISO
+        if (hasDifferentRestaurantProduct) {
+            setIsConfirmationDialogOpen(true);
+            return;
+        };
+        
+        addToCart();
     };
 
     const handleIncreaseQuantityClick =() => setQuantity(currentState => currentState + 1);
@@ -137,6 +155,23 @@ const ProductsDetails = ({ products, complementaryProducts }: ProductsDetailsPro
                     <Cart/>
                 </SheetContent>
             </Sheet>
+
+            <AlertDialog open={ isConfirmationDialogOpen } onOpenChange={ setIsConfirmationDialogOpen }>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                    <AlertDialogTitle>Deseja mesmo fazer isso ?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                        O produto que você está adicionando pertence há outro restaurante.
+                        Se você adicionar este produto, o produto anterior será removido da sacola.
+                    </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                    <AlertDialogCancel>Cancela</AlertDialogCancel>
+                    <AlertDialogAction onClick={ addToCart}>Confirma</AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+
         </>
     );
 }

@@ -95,9 +95,32 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         return setProducts((prev) => prev.filter((products) => products.id !== productId));
     }
 
-    const addProductToCart = (product: Products, quantity: number) => {
+    const addProductToCart = (
+        product: Prisma.ProductsGetPayload<{
+            include: {
+                restaurant: {
+                    select: {
+                        deliveryFee: true,
+                    };
+                };
+            };
+        }>, 
+        quantity: number,
+        emptyCart: boolean
+    ) => {
+
+        // VERIFICAR SE HÁ UM PRODUTO DE OUTRO RESTAURANTE NA SACOLA
+        const hasDifferentRestaurantProduct = products.some(
+            (CartProduct) => CartProduct.restaurantId !== product.restaurantId
+        );
+
+        if ( hasDifferentRestaurantProduct) {
+            setProducts([]);
+        };
+
         // VERIFICA SE O PRODUTO JÁ ESTÁ NA SACOLA
         const isProductAlreadyOnCart = products.some((cartProduct) => cartProduct.id === product.id);
+
         // SE ESTIVER NO IF, AUMENTA A QUANTIDADE
         if (isProductAlreadyOnCart) {
             setProducts((prev) =>
@@ -124,6 +147,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
                 subtotalPrice,
                 totalPrice,
                 totalDiscount,
+                //@ts-ignore
                 addProductToCart, 
                 decreaseProductQuantity, 
                 increaseProductQuantity,
