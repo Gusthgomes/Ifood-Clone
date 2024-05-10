@@ -1,14 +1,26 @@
-import { CartProduct } from "@/context/cart";
+"use client";
+
+import { CartContext, CartProduct } from "@/context/cart";
 import { calculateProductsTotalPrice, formatCurrency } from "@/helpers/price";
 import Image from "next/image";
 import { Button } from "./ui/button";
-import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+import { ChevronLeftIcon, ChevronRightIcon, TrashIcon } from "lucide-react";
+import { useContext } from "react";
 
 interface CartItemProps {
     cartProduct: CartProduct;
 };
 
 const CartItem = ({ cartProduct }: CartItemProps) => {
+
+    const { decreaseProductQuantity, increaseProductQuantity, removeProductFromCart } = useContext(CartContext);
+
+    const handleDecreaseQuantityClick = () => decreaseProductQuantity(cartProduct.id);
+
+    const handleIncreaseQuantityClick = () => increaseProductQuantity(cartProduct.id);
+
+    const handleRemoveProductClick = () => removeProductFromCart(cartProduct.id);
+
     return ( 
         <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -26,11 +38,11 @@ const CartItem = ({ cartProduct }: CartItemProps) => {
                     <h3 className="text-xs"> { cartProduct.name } </h3>
                     <div className="flex items-center gap-1">
                         <h4 className="text-sm font-semibold">
-                            { formatCurrency(calculateProductsTotalPrice(cartProduct)) }
+                            { formatCurrency(calculateProductsTotalPrice(cartProduct) * cartProduct.quantity) }
                         </h4>
                         { cartProduct.discountPercentage > 0 && (
                             <span className="text-xs text-muted-foreground line-through">
-                                { formatCurrency(Number(cartProduct.price)) }
+                                { formatCurrency(Number(cartProduct.price) * cartProduct.quantity) }
                             </span>
                         )}
                     </div>
@@ -40,20 +52,23 @@ const CartItem = ({ cartProduct }: CartItemProps) => {
                         <Button 
                             size="icon"
                             variant="ghost"
-                            className="w-8 h-8 border-muted-foreground border border-solid"    
+                            className="w-7 h-7 border-muted-foreground border border-solid"    
                         >
-                            <ChevronLeftIcon size={18}/>
+                            <ChevronLeftIcon size={16} onClick={ handleDecreaseQuantityClick }/>
                         </Button>
-                        <span className="w-2 text-sm">{ cartProduct.quantity }</span>
+                        <span className="W-3 text-xs block">{ cartProduct.quantity }</span>
                         <Button 
-                            size="icon" className="w-8 h-8"    
+                            size="icon" className="w-7 h-7"    
                         >
-                            <ChevronRightIcon size={18}/>
+                            <ChevronRightIcon size={16} onClick={ handleIncreaseQuantityClick }/>
                         </Button>
                     </div>
                 </div>
             </div>
             {/* BOTÃO DE DELETE */}
+            <Button onClick={ handleRemoveProductClick } size="icon" className="w-8 h-8 border-muted-foreground border border-solid" variant="ghost">
+                <TrashIcon size={ 18 }/>
+            </Button>
         </div>
     );
 }
