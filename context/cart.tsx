@@ -48,7 +48,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     const totalPrice = useMemo(() => {
         return products.reduce((acc, products) => {
             return acc + calculateProductsTotalPrice(products) * products.quantity;
-        }, 0)
+        }, 0) - Number(products[0]?.restaurant?.deliveryFee)
     }, [products]);
 
     const totalDiscount = subtotalPrice - totalPrice;
