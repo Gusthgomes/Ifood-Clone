@@ -7,6 +7,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import { Console } from "console";
+import BagBanner from "@/components/BagBanner";
 
 export const metadata: Metadata = {
     title: "Detalhes do restaurante",
@@ -113,6 +114,8 @@ const RestaurantPage = async ({ params: { id } }: RestaurantPageProps) => {
                 <ProductList product={ category.products }/>
             </div>
             ))}
+
+            <BagBanner restaurant={restaurant}/>
         </div>
     );
 }
