@@ -130,7 +130,7 @@ const ProductsDetails = ({ products, complementaryProducts }: ProductsDetailsPro
             </div>
 
             <Sheet open={ isCartOpen } onOpenChange={ setIsCartOpen }>
-                <SheetContent>
+                <SheetContent className="w-[90vw]">
                     <SheetHeader>
                         <SheetTitle className="text-left">Sacola</SheetTitle>
                     </SheetHeader>
