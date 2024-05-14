@@ -6,9 +6,6 @@ import { Button } from "./ui/button";
 import { Separator } from "./ui/separator";
 import { ChevronRightIcon } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useContext } from "react";
-import { CartContext } from "@/context/cart";
 import { formatCurrency } from "@/helpers/price";
 
 interface OrderItemProps {
@@ -23,24 +20,6 @@ interface OrderItemProps {
         };
     }>;
 };
-
-//const { addProductToCart } = useContext(CartContext);
-
-  //const router = useRouter();
-
-//   const handleRedoOrderClick = () => {
-//     for (const orderProduct of order.products) {
-//       addProductToCart({
-//         product: {
-//           ...orderProduct.product,
-//           restaurant: order.restaurant,
-//           quantity: orderProduct.quantity,
-//         },
-//       });
-//     }
-
-//     router.push(`/restaurants/${order.restaurantId}`);
-//   };
 
 const getOrderStatusLabel = (status: OrderStatus) => {
     switch (status) {
@@ -58,6 +37,7 @@ const getOrderStatusLabel = (status: OrderStatus) => {
   };
 
 const OrderItem = ({ order }: OrderItemProps) => {
+
     return ( 
         <Card>
             <CardContent className="p-5">
@@ -117,15 +97,6 @@ const OrderItem = ({ order }: OrderItemProps) => {
 
                 <div className="flex items-center justify-between">
                 <p className="text-sm">{formatCurrency(Number(order.totalPrice))}</p>
-                <Button
-                    variant="ghost"
-                    size="sm"
-                    className="text-xs text-primary"
-                    disabled={order.status !== "COMPLETED"}
-                    //onClick={handleRedoOrderClick}
-                >
-                    Refazer pedido
-                </Button>
                 </div>
             </CardContent>
         </Card>
