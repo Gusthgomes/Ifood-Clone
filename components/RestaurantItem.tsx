@@ -23,10 +23,10 @@ const RestaurantItem = ({ restaurant, className, userId, userFavoritesRestaurant
 
     const { data } = useSession();
 
-    const isFavorite = userFavoritesRestaurants.some(
+    const isFavorite = Array.isArray(userFavoritesRestaurants) && userFavoritesRestaurants.some(
         (fav) => fav.restaurantId === restaurant.id,
     );
-
+    
     const handleFavoriteClick = async () => {
         if (!data?.user.id) return;
         try {
