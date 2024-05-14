@@ -53,8 +53,10 @@ const Cart = ({setIsOpen}: CartProps) => {
                 totalDiscount,
                 totalPrice,
                 deliveryFee: restaurant.deliveryFee,
+                //@ts-ignore
                 deliveryTimeMinutes: restaurant.deliveryTimeMinutes,
                 restaurant: {
+                //@ts-ignore
                   connect: { id: restaurant.id },
                 },
                 status: OrderStatus.CONFIRMED,
