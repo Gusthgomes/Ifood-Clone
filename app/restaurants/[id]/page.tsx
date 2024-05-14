@@ -6,8 +6,9 @@ import { StarIcon } from "lucide-react";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
-import { Console } from "console";
 import BagBanner from "@/components/BagBanner";
+import { getServerSession } from "next-auth";
+import { authOption } from "@/lib/auth";
 
 export const metadata: Metadata = {
     title: "Detalhes do restaurante",
@@ -59,13 +60,18 @@ const RestaurantPage = async ({ params: { id } }: RestaurantPageProps) => {
         },
     });
 
-    console.log(restaurant);
-
     if (!restaurant) return notFound();
+
+    const session = await getServerSession(authOption);
+    const userFavoriteRestaurant = await db.userFavoriteRestaurant.findMany({
+        where: {
+            userId: session?.user?.id,
+        },
+    });
 
     return ( 
         <div>
-            <RestaurantImage restaurants={ restaurant }/>
+            <RestaurantImage restaurants={ restaurant } userFavoriteRestaurant={userFavoriteRestaurant}/>
 
             <div className="flex justify-between items-center px-5 pt-5 relative z-50 mt-[-1.5rem] rounded-tl-3xl rounded-tr-3xl bg-white py-5">
                 {/* TITULO */}
@@ -103,7 +109,6 @@ const RestaurantPage = async ({ params: { id } }: RestaurantPageProps) => {
             </div>
 
             <div className="mt-6 space-y-4">
-                {/* TODO: MOSTRAR PRODUTOS MAIS PEDIDOS */}
                 <h2 className="px-5 font-semibold"> Mais Pedidos</h2>
                 <ProductList product={ restaurant.products }/>
             </div>
