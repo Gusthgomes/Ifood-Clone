@@ -13,6 +13,7 @@ import { CartContext } from "@/context/cart";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "./ui/sheet";
 import Cart from "./Cart";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "./ui/alert-dialog";
+import { useSession } from "next-auth/react";
 
 interface ProductsDetailsProps {
     products: Prisma.ProductsGetPayload<{
@@ -32,6 +33,8 @@ const ProductsDetails = ({ products, complementaryProducts }: ProductsDetailsPro
     const [quantity, setQuantity] = useState(1);
     const [isCartOpen, setIsCartOpen] = useState(false);
     const [isConfirmationDialogOpen, setIsConfirmationDialogOpen] = useState(false);
+
+    const session = useSession();
 
     const { addProductToCart, products: prod } = useContext(CartContext);
 
@@ -138,12 +141,14 @@ const ProductsDetails = ({ products, complementaryProducts }: ProductsDetailsPro
                 </div>
 
                 <div className="mt-6 px-5">
-                    <Button 
-                        onClick={ handleAddToCartClick }
-                        className="w-full font-semibold"
-                    >
-                        Adicionar a sacola
-                    </Button>
+                    {session?.data?.user && (
+                        <Button 
+                            onClick={ handleAddToCartClick }
+                            className="w-full font-semibold"
+                        >
+                            Adicionar a sacola
+                        </Button>
+                    )}
                 </div>     
             </div>
 
