@@ -24,7 +24,7 @@ import {
 
 const Cart = () => {
 
-    const [isSubmitLoadind, setIsSubmitLoadind] = useState(false);
+    const [isSubmitLoading, setIsSubmitLoading] = useState(false);
 
     const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
 
@@ -38,7 +38,7 @@ const Cart = () => {
         const restaurant = products[0].restaurant;
 
         try {
-            setIsSubmitLoadind(true);
+            setIsSubmitLoading(true);
 
             await CreateOrder({
                 subtotalPrice,
@@ -53,13 +53,21 @@ const Cart = () => {
                 user: {
                   connect: { id: data.user.id },
                 },
+                products: {
+                    createMany: {
+                        data: products.map((product) => ({
+                            productId: product.id,
+                            quantity: product.quantity,
+                        })),
+                    },
+                },
             });
 
             clearCart();
         } catch (error) {
             console.log(error);
         } finally {
-            setIsSubmitLoadind(false);
+            setIsSubmitLoading(false);
         };
     };
 
@@ -133,7 +141,7 @@ const Cart = () => {
                     <Button 
                         className="w-full mt-6" 
                         onClick={() => setIsConfirmDialogOpen(true)}
-                        disabled={isSubmitLoadind}
+                        disabled={isSubmitLoading}
                     >
                         Finalizar pedido
                     </Button>
@@ -149,15 +157,16 @@ const Cart = () => {
                     </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                    <AlertDialogCancel disabled={isConfirmDialogOpen}>
-                        {isSubmitLoadind && (
-                            <Loader2 className="mr-2 h-4 w-4 animate-spin"/>
+                    <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                        <AlertDialogAction
+                        onClick={handleFinishOrderClick}
+                        disabled={isSubmitLoading}
+                        >
+                        {isSubmitLoading && (
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                         )}
-                        Cancelar
-                    </AlertDialogCancel>
-                    <AlertDialogAction onClick={handleFinishOrderClick}>
                         Finalizar
-                    </AlertDialogAction>
+                        </AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
