@@ -1,52 +1,18 @@
-"use client";
+import Restaurant from "@/components/Restaurant";
+import { Metadata } from "next";
+import { Suspense } from "react";
 
-import { Restaurant as food } from "@prisma/client";
-import { notFound, useSearchParams } from "next/navigation"
-import { useState, useEffect } from "react";
-import searchForRestaurants from "./actions/search";
-import Header from "@/components/Header";
-import RestaurantItem from "@/components/RestaurantItem";
-
-const Restaurant = () => {
-
-    const [restaurants, setRestaurants] = useState<food[]>([]);
-    const searchParams = useSearchParams();
-    const searchFor = searchParams.get("search");
-
-    useEffect( () => {
-        const featchRestaurants = async () => {
-    
-            if(!searchFor) {
-                return;
-            }
-
-            const foundRestaurants = await searchForRestaurants(searchFor);
-            setRestaurants(foundRestaurants);
-        };
-
-        featchRestaurants();
-
-    }, [searchParams]);
-
-    if (!searchFor) return notFound();
-
-  return (
-    <>
-            <Header/>
-            <div className="p-6 px-5">
-            <h2 className="text-lg font-semibold mb-6">Restaurantes Encontrados</h2>
-            <div className="flex w-full flex-col gap-6">
-                { restaurants.map( (restaurant) => (
-                    <RestaurantItem 
-                        key={restaurant.id} 
-                        restaurant={ restaurant }
-                        className="min-w-full max-w-full"
-                    />
-                ))}
-            </div>
-        </div>
-        </>
-  )
+export const metadata: Metadata = {
+    title: "Restaurantes",
+    description: "Página de restaurantes",
 };
 
-export default Restaurant
+const restaurantPage = () => {
+    return (
+    <Suspense>
+        <Restaurant/>
+    </Suspense>
+    );
+}
+
+export default restaurantPage;
